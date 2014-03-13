@@ -31,6 +31,9 @@ var XplorepressGenerator = yeoman.generators.Base.extend({
         this.log(chalk.magenta('You\'re using the fantastic XplorePress generator.'));
 
         var prompts = [{
+            name: 'siteName',
+            message: 'What\'s your site name?'
+        }, {
             name: 'wpVersion',
             message: 'What version of WordPress do you want to use?',
             default: '3.8.1'
@@ -51,6 +54,7 @@ var XplorepressGenerator = yeoman.generators.Base.extend({
         }];
 
         this.prompt(prompts, function (props) {
+            this.siteName = props.siteName;
             this.wpVersion = props.wpVersion;
             this.wpMethod = props.wpMethod;
             this.useVagrant = props.useVagrant;
