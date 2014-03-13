@@ -83,10 +83,16 @@ var XplorepressGenerator = yeoman.generators.Base.extend({
     app: function () {
         this.mkdir('httpdocs');
         this.mkdir('httpdocs/wp-content');
+        this.mkdir('httpdocs/wp-content/plugins');
+        this.mkdir('httpdocs/wp-content/themes');
 
         this.copy('httpdocs/.htaccess', 'httpdocs/.htaccess');
         this.copy('httpdocs/index.php', 'httpdocs/index.php');
         this.copy('httpdocs/wp-config.php', 'httpdocs/wp-config.php');
+
+        this.copy('silience.php', 'httpdocs/wp-content/index.php');
+        this.copy('silience.php', 'httpdocs/wp-content/plugins/index.php');
+        this.copy('silience.php', 'httpdocs/wp-content/themes/index.php');
     },
 
     wordpressFiles: function () {
