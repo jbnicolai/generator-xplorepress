@@ -39,10 +39,10 @@ var XplorepressGenerator = yeoman.generators.Base.extend({
             name: 'wpMethod',
             message: 'What source do you want to use for installing WordPress?',
             choices: [
-                { name: 'GitHub', value: 'git' },
-                { name: 'Composer', value: 'composer' }
+                { name: 'Composer', value: 'composer' },
+                { name: 'GitHub', value: 'git' }
             ],
-            default: 'git'
+            default: 'composer'
         }, {
             type: 'confirm',
             name: 'useVagrant',
@@ -74,6 +74,39 @@ var XplorepressGenerator = yeoman.generators.Base.extend({
 
         this.prompt(prompts, function (props) {
             this.vagrantBox = props.vagrantBox;
+
+            done();
+        }.bind(this));
+    },
+
+    askComposer: function () {
+        if (this.wpMethod !== 'composer') {
+            return;
+        }
+
+        var done = this.async();
+
+        var prompts = [{
+            type: 'checkbox',
+            name: 'plugins',
+            message: 'We recommend the following WordPress plugins:',
+            choices: [
+                { name: 'Akismet', value: 'akismet', checked: true },
+                { name: 'Wordfence', value: 'wordfence', checked: true },
+                { name: 'WP Updates Notifier', value: 'notifier', checked: true }
+            ]
+        }];
+
+        this.prompt(prompts, function (props) {
+            var plugins = props.plugins;
+
+            function hasPlugin (plugin) {
+                return plugins.indexOf(plugin) !== -1;
+            }
+
+            this.includeAkismet = hasPlugin('akismet');
+            this.includeNotifier = hasPlugin('notifier');
+            this.includeWordfence = hasPlugin('wordfence');
 
             done();
         }.bind(this));
