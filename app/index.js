@@ -89,7 +89,6 @@ var XplorepressGenerator = yeoman.generators.Base.extend({
         git.submoduleAdd('git://github.com/WordPress/WordPress.git', 'httpdocs/wp', function (err) {
             if (err) {
                 me.log(chalk.red(err));
-                //done(); return;
             }
 
             me.log(chalk.magenta('Checking out version ' + me.wpVersion));
@@ -98,7 +97,6 @@ var XplorepressGenerator = yeoman.generators.Base.extend({
             git.checkout(me.wpVersion, function (err) {
                 if (err) {
                     me.log(chalk.red(err));
-                    //done(); return;
                 }
 
                 done();
@@ -132,6 +130,8 @@ var XplorepressGenerator = yeoman.generators.Base.extend({
         this.template('_gitignore', '.gitignore');
         this.copy('editorconfig', '.editorconfig');
         this.copy('jshintrc', '.jshintrc');
+
+        this.template('_README.md', 'README.md');
     },
 
     vagrantFiles: function() {
