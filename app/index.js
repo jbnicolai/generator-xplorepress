@@ -66,18 +66,51 @@ var XplorepressGenerator = yeoman.generators.Base.extend({
     },
 
     gitConfig: function() {
-        var done = this.async();
-        var logger = this.log;
+        var done = this.async(),
+            me = this;
 
-        this.log(chalk.magenta('Configuring Git'));
+        me.log(chalk.magenta('Configuring Git'));
 
         git.init(function (err) {
             if (err) {
-                logger(chalk.red(err));
+                me.log(chalk.red(err));
             }
-        });
 
-        done();
+            done();
+        });
+    },
+
+    wordpressInstall: function () {
+        var done = this.async(),
+            me = this;
+
+        this.log(chalk.magenta('Checking out WordPress from GitHub - this may take some time...'));
+
+        git.submoduleAdd('git://github.com/WordPress/WordPress.git', 'httpdocs/wp', function (err) {
+            if (err) {
+                me.log(chalk.red(err));
+                //done(); return;
+            }
+
+            me.log(chalk.magenta('Checking out version ' + me.wpVersion));
+
+            git._baseDir = 'httpdocs/wp';
+            git.checkout(me.wpVersion, function (err) {
+                if (err) {
+                    me.log(chalk.red(err));
+                    //done(); return;
+                }
+
+                done();
+            });
+        });
+    },
+
+    wordpressTheme: function () {
+        this.log(chalk.magenta('Copying TwentyFourteen theme'));
+
+        var src = this.destinationRoot() + '/httpdocs/wp/wp-content/themes/twentyfourteen';
+        this.directory(src, 'httpdocs/wp-content/themes/twentyfourteen');
     },
 
     app: function () {
@@ -90,34 +123,9 @@ var XplorepressGenerator = yeoman.generators.Base.extend({
         this.copy('httpdocs/index.php', 'httpdocs/index.php');
         this.copy('httpdocs/wp-config.php', 'httpdocs/wp-config.php');
 
-        this.copy('silience.php', 'httpdocs/wp-content/index.php');
-        this.copy('silience.php', 'httpdocs/wp-content/plugins/index.php');
-        this.copy('silience.php', 'httpdocs/wp-content/themes/index.php');
-    },
-
-    wordpressFiles: function () {
-        var done = this.async(),
-            me = this;
-
-        this.log(chalk.magenta('Checking out WordPress from GitHub - this may take some time...'));
-
-        git.submoduleAdd('git://github.com/WordPress/WordPress.git', 'httpdocs/wp', function (err) {
-            if (err) {
-                me.log(chalk.red(err));
-                done(); return;
-            }
-
-            me.log(chalk.magenta('Checking out version ' + me.wpVersion));
-            git._baseDir = 'httpdocs/wp';
-            git.checkout(me.wpVersion, function (err) {
-                if (err) {
-                    me.log(chalk.red(err));
-                    done(); return;
-                }
-            });
-        });
-
-        done();
+        this.copy('silence.php', 'httpdocs/wp-content/index.php');
+        this.copy('silence.php', 'httpdocs/wp-content/plugins/index.php');
+        this.copy('silence.php', 'httpdocs/wp-content/themes/index.php');
     },
 
     projectfiles: function () {
@@ -133,7 +141,9 @@ var XplorepressGenerator = yeoman.generators.Base.extend({
 
         this.template('_Vagrantfile', 'Vagrantfile');
         this.directory('puppet', 'puppet');
-    }
+    },
+
+
 });
 
 module.exports = XplorepressGenerator;
