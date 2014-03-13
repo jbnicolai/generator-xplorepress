@@ -176,15 +176,23 @@ var XplorepressGenerator = yeoman.generators.Base.extend({
         }
     },
 
+    wordpressConfig: function () {
+        // Puppet will do this when using vagrant
+        if (this.useVagrant) {
+            return;
+        }
+
+        // Copy the files
+        this.copy('puppet/modules/wordpress/files/.htaccess', '.htaccess')
+        this.copy('puppet/modules/wordpress/files/index.php', 'index.php')
+        this.copy('puppet/modules/wordpress/files/wp-config.php', 'wp-config.php')
+    },
+
     app: function () {
         this.mkdir('httpdocs');
         this.mkdir('httpdocs/wp-content');
         this.mkdir('httpdocs/wp-content/plugins');
         this.mkdir('httpdocs/wp-content/themes');
-
-        this.copy('httpdocs/.htaccess', 'httpdocs/.htaccess');
-        this.copy('httpdocs/index.php', 'httpdocs/index.php');
-        this.copy('httpdocs/wp-config.php', 'httpdocs/wp-config.php');
 
         this.copy('silence.php', 'httpdocs/wp-content/index.php');
         this.copy('silence.php', 'httpdocs/wp-content/plugins/index.php');
