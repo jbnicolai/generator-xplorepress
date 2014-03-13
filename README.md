@@ -4,7 +4,7 @@ A Yeoman generator for [WordPress](http://wordpress.org/), designed to work with
 
 ## What it does
 
-WordPress is checked out from GitHub to `httpdocs/wp`.  You can specify which version to install.
+You can choose to deploy WordPress via GitHub or Composer to `httpdocs/wp`.  You can specify which version to install also.
 
 A custom `index.php` is created to run WordPress from `httpdocs/wp` and themes and plugins from `httpdocs/wp-content`.
 
@@ -19,6 +19,7 @@ The default WordPress admin account is `vagrant`, password `vagrant`.
 ## Customisation
 
 If you choose to use Vagrant, [Puppet](http://puppetlabs.com/) will install a default WordPress during provisioning.
+
 You can use a custom database by exporting it and overwriting `puppet/modules/wordpress/files/wordpress-db.sql`.
 
 ## License

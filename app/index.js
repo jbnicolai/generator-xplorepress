@@ -11,6 +11,10 @@ var XplorepressGenerator = yeoman.generators.Base.extend({
         this.pkg = require('../package.json');
 
         this.on('end', function () {
+            if (this.wpMethod === 'composer') {
+                this.log(chalk.magenta('Be sure to run ') + chalk.yellow('composer install'));
+            }
+
             if (!this.options['skip-install']) {
                 //this.installDependencies();
             }
@@ -31,6 +35,15 @@ var XplorepressGenerator = yeoman.generators.Base.extend({
             message: 'What version of WordPress do you want to use?',
             default: '3.8.1'
         }, {
+            type: 'list',
+            name: 'wpMethod',
+            message: 'What source do you want to use for installing WordPress?',
+            choices: [
+                { name: 'GitHub', value: 'git' },
+                { name: 'Composer', value: 'composer' }
+            ],
+            default: 'git'
+        }, {
             type: 'confirm',
             name: 'useVagrant',
             message: 'Do you want to use Vagrant?',
@@ -39,6 +52,7 @@ var XplorepressGenerator = yeoman.generators.Base.extend({
 
         this.prompt(prompts, function (props) {
             this.wpVersion = props.wpVersion;
+            this.wpMethod = props.wpMethod;
             this.useVagrant = props.useVagrant;
 
             done();
@@ -80,7 +94,11 @@ var XplorepressGenerator = yeoman.generators.Base.extend({
         });
     },
 
-    wordpressInstall: function () {
+    wordpressGit: function () {
+        if (this.wpMethod !== 'git') {
+            return;
+        }
+
         var done = this.async(),
             me = this;
 
@@ -104,11 +122,21 @@ var XplorepressGenerator = yeoman.generators.Base.extend({
         });
     },
 
-    wordpressTheme: function () {
-        this.log(chalk.magenta('Copying TwentyFourteen theme'));
+    wordpressComposer: function () {
+        if (this.wpMethod !== 'composer') {
+            return;
+        }
 
-        var src = this.destinationRoot() + '/httpdocs/wp/wp-content/themes/twentyfourteen';
-        this.directory(src, 'httpdocs/wp-content/themes/twentyfourteen');
+        this.template('_composer.json', 'composer.json');
+    },
+
+    wordpressTheme: function () {
+        if (this.wpMethod === 'git') {
+            this.log(chalk.magenta('Copying TwentyFourteen theme'));
+
+            var src = this.destinationRoot() + '/httpdocs/wp/wp-content/themes/twentyfourteen';
+            this.directory(src, 'httpdocs/wp-content/themes/twentyfourteen');
+        }
     },
 
     app: function () {
