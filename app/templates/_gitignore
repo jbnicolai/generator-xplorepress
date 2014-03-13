@@ -1,4 +1,7 @@
-<% if (useVagrant) { %>.vagrant/<% } %><% if (wpMethod === 'composer') { %>
+httpdocs/.htaccess
+httpdocs/index.php
+httpdocs/wp-config.php<% if (useVagrant) { %>
+.vagrant/<% } %><% if (wpMethod === 'composer') { %>
 vendor/
 httpdocs/wp/
 httpdocs/wp-content/plugins/<% } %>
