@@ -12,11 +12,12 @@ var XplorePressGenerator = yeoman.generators.Base.extend({
 
         this.on('end', function () {
             if (this.wpMethod === 'composer') {
-                this.log(chalk.magenta('Be sure to run ') + chalk.yellow('composer install'));
-            }
-
-            if (!this.options['skip-install']) {
-                //this.installDependencies();
+                if (this.options['skip-install']) {
+                    this.log(chalk.magenta('Be sure to run ') + chalk.yellow('composer install'));
+                } else {
+                    this.log(chalk.magenta('Installing composer dependencies'));
+                    this.runInstall('composer');
+                }
             }
         });
     },
@@ -212,8 +213,7 @@ var XplorePressGenerator = yeoman.generators.Base.extend({
 
         this.template('_Vagrantfile', 'Vagrantfile');
         this.directory('puppet', 'puppet');
-    },
-
+    }
 
 });
 
