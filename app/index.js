@@ -6,7 +6,7 @@ var chalk = require('chalk');
 var git = require('simple-git')();
 
 
-var XplorepressGenerator = yeoman.generators.Base.extend({
+var XplorePressGenerator = yeoman.generators.Base.extend({
     init: function () {
         this.pkg = require('../package.json');
 
@@ -95,9 +95,8 @@ var XplorepressGenerator = yeoman.generators.Base.extend({
             name: 'plugins',
             message: 'We recommend the following WordPress plugins:',
             choices: [
-                { name: 'Akismet', value: 'akismet', checked: true },
-                { name: 'Wordfence', value: 'wordfence', checked: true },
-                { name: 'WP Updates Notifier', value: 'notifier', checked: true }
+                { name: 'Akismet', value: 'akismet', checked: false },
+                { name: 'Wordfence', value: 'wordfence', checked: true }
             ]
         }];
 
@@ -109,7 +108,6 @@ var XplorepressGenerator = yeoman.generators.Base.extend({
             }
 
             this.includeAkismet = hasPlugin('akismet');
-            this.includeNotifier = hasPlugin('notifier');
             this.includeWordfence = hasPlugin('wordfence');
 
             done();
@@ -219,4 +217,4 @@ var XplorepressGenerator = yeoman.generators.Base.extend({
 
 });
 
-module.exports = XplorepressGenerator;
+module.exports = XplorePressGenerator;

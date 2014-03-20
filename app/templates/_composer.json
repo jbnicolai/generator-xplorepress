@@ -15,8 +15,7 @@
 	"require": {
 		"johnpbloch/wordpress": "<%= wpVersion %>",
 		"wpackagist-theme/twentyfourteen": "*"<% if (includeAkismet) { %>,
-		"wpackagist-plugin/akismet": "*"<% } %><% if (includeNotifier) { %>,
-		"wpackagist-plugin/wp-updates-notifier": "*"<% } %><% if (includeWordfence) { %>,
+		"wpackagist-plugin/akismet": "*"<% } %><% if (includeWordfence) { %>,
 		"wpackagist-plugin/wordfence": "*"<% } %>
 	}
 }
